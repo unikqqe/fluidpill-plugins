@@ -1,4 +1,23 @@
 {
   "schema": 1,
-  "plugins": []
+  "plugins": [
+    {
+      "id": "claude",
+      "name": "Claude",
+      "version": "2.0.0",
+      "author": "Fluidpill",
+      "description": "What Claude Code is doing in each session: the task, the current tool, and when it needs you or is done.",
+      "accent": "#d97757",
+      "uses": [
+        "setup",
+        "alerts",
+        "sound",
+        "other_apps"
+      ],
+      "download": "https://github.com/unikqqe/fluidpill-plugins/releases/download/claude-2.0.0/claude-2.0.0.zip",
+      "sha256": "eed65969e9c8210d7e9c15b222eb9f0410248faa4611d544a36ff577a3097275",
+      "publisher_key": "p256:eb0998cde18011d92a33564404c1b4fd848a1ec5f18c2a1fe18f195efc3da3d348aed594f38e63bb862e07a2fa9ab7d380bb36dd486e1e34df9eb1b104cf1255",
+      "min_fluidpill": "0.1.0"
+    }
+  ]
 }

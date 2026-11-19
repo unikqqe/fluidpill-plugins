@@ -37,6 +37,7 @@ https://raw.githubusercontent.com/unikqqe/fluidpill-plugins/main/index.json
 | `author`, `description` | no | Shown in the Store and on the install sheet. |
 | `accent` | no | `#rrggbb`. Colours the plugin's tile. |
 | `icon` | no | A PNG of at most 64 KiB: an https link, or a path relative to this file (`icons/x.png`). |
+| `icon_builtin` | no | The name of a Fluidpill built-in icon (`claude` for `"icon": "builtin:claude"` in `plugin.json`). `pack` writes it. The Store draws it when there is no `icon`. |
 | `uses` | no | What the plugin uses, shown on the install sheet. Copy it from the entry `pack` writes. |
 | `download` | yes | Where the zip is (https). |
 | `sha256` | yes | The zip's SHA-256. Fluidpill refuses a download that does not match, before it extracts anything. |

@@ -8,6 +8,7 @@
       "author": "Fluidpill",
       "description": "What Claude Code is doing in each session: the task, the current tool, and when it needs you or is done.",
       "accent": "#d97757",
+      "icon_builtin": "claude",
       "uses": [
         "setup",
         "alerts",

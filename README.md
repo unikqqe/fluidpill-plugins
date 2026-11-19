@@ -22,7 +22,7 @@ https://raw.githubusercontent.com/unikqqe/fluidpill-plugins/main/index.json
   "accent": "#d97757",
   "icon": "icons/claude.png",
   "uses": ["setup", "alerts", "sound", "other_apps"],
-  "download": "https://github.com/unikqqe/dyniland/releases/download/plugin-claude-v2.0.0/claude-2.0.0.zip",
+  "download": "https://github.com/unikqqe/fluidpill-plugins/releases/download/claude-2.0.0/claude-2.0.0.zip",
   "sha256": "…64 hex digits…",
   "publisher_key": "p256:…",
   "min_fluidpill": "0.1.0"
@@ -51,7 +51,7 @@ A bad entry is left out of the Store, not the whole catalog. Keys Fluidpill does
 2. Publish the zip at that URL (a GitHub release asset, for example).
 3. Replace the plugin's entry in `index.json` with the contents of `<id>-<version>.catalog.json`.
 
-The Claude plugin is built by the `Claude plugin` workflow in the Fluidpill repository. Pushing a `plugin-claude-v<version>` tag attaches both files to the release.
+The Claude plugin is built by the `Claude plugin` workflow in the Fluidpill repository: pushing a `plugin-claude-v<version>` tag attaches both files to that (private) repository's release. Upload the zip to a `claude-<version>` release here, where its entry's `download` points, then update `index.json`.
 
 Installed plugins update from the Store's **Update** button. An update runs the plugin's setup step again, so the Claude hooks always point at the new files.
 

@@ -1,0 +1,56 @@
+# Checks index.json on every pull request and push: the required keys, the
+# ids, then each plugin's zip against its SHA-256.
+
+name: Check the catalog
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check index.json
+        shell: pwsh
+        run: |
+          $index = Get-Content index.json -Raw | ConvertFrom-Json
+          if ($index.schema -ne 1) { Write-Error '"schema" must be 1'; exit 1 }
+          $bad = 0
+          $seen = @{}
+          foreach ($e in $index.plugins) {
+            $id = $e.id
+            $why = @()
+            if ($id -notmatch '^[a-z0-9][a-z0-9-]{1,31}$') { $why += "bad id" }
+            if ($seen.ContainsKey($id)) { $why += "listed twice" }
+            $seen[$id] = $true
+            foreach ($k in "name", "version", "download", "sha256") { if (-not $e.$k) { $why += "no $k" } }
+            if ($e.version -and $e.version -notmatch '^\d+\.\d+\.\d+([-+].*)?$') { $why += "version is not semver" }
+            if ($e.sha256 -and $e.sha256 -notmatch '^[0-9a-fA-F]{64}$') { $why += "sha256 is not 64 hex digits" }
+            if ($e.download -and -not $e.download.StartsWith("https://")) { $why += "download is not https" }
+            if ($e.publisher_key -and $e.publisher_key -notmatch '^p256:[0-9a-fA-F]{128}$') { $why += "bad publisher_key" }
+            if (-not $why -and $e.download) {
+              $zip = Join-Path $env:RUNNER_TEMP "$id.zip"
+              try {
+                Invoke-WebRequest -Uri $e.download -OutFile $zip -MaximumRedirection 3
+                $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
+                if ($hash -ne $e.sha256.ToLower()) { $why += "the zip's SHA-256 is $hash" }
+                if ((Get-Item $zip).Length -gt 64MB) { $why += "the zip is larger than 64 MiB" }
+              } catch {
+                $why += "could not download it: $_"
+              }
+            }
+            if ($why) {
+              Write-Host "::error::${id}: $($why -join '; ')"
+              $bad++
+            } else {
+              Write-Host "ok: $id $($e.version)"
+            }
+          }
+          if ($bad) { exit 1 }
